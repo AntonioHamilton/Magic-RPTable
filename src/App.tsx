@@ -1,9 +1,7 @@
+import { Home } from "@pages/Home";
+
 const App = () => {
-  return (
-    <div>
-      <h1>Magic RPTable</h1>
-    </div>
-  );
+  return <Home />;
 };
 
 export default App;

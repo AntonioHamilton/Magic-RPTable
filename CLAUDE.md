@@ -3,22 +3,28 @@
 ## Stack e Configurações
 
 ### Frontend
+
 - **Runtime:** Bun com TypeScript
 - **Estilização:** Tailwind CSS + styled-components
 - **Import de styled-components:** Sempre usar `import * as SC from "./styled";`
 
 ### Testes
+
 - **Ferramentas:** Playwright e Jest
 - **Coverage:** Iniciar com cobertura baixa nas features mais importantes, aumentando gradualmente
 - **Abordagem:** Para cada especificação técnica, demonstrar maneiras de utilizar e testes para contexto
 - **Estrutura:** Testes colocalizados com componentes (`ComponentName.test.tsx`)
+- **Browser MCP:** Sempre que for necessário testar algo usando MCP do browser, utilizar o browser em uma tab diretamente no Cursor. Não abrir o app do Chrome separadamente
 
 ### Lint e Qualidade
+
 - Utilizar regras de Lint configuradas
 - Executar `npm run lint` antes de commits
 - Prettier configurado: semicolons, double quotes, no trailing comma, tabWidth 2
+- **Format on Save:** Configurado no VSCode/Cursor para formatar automaticamente ao salvar (Ctrl+S). Todas as linhas adicionadas devem seguir o estilo do Prettier
 
 ### Performance
+
 - Analisar necessidade de `useMemo`, `useCallback` e `Memo`
 - Aplicar otimizações quando necessário
 
@@ -89,20 +95,25 @@ Para componentes simples, pode ser apenas `ComponentName.tsx` e `ComponentName.t
 ## Instruções Gerais de Código
 
 ### Comentários
+
 - Todos os comentários devem ter uma ideia clara para entendimento e contexto de outros agents
 
 ### Idioma
+
 - Variáveis, funções, classes, tipagens e outros elementos de código devem ser em inglês
 
 ### Modificações
+
 - Não alterar trechos de código ou arquivos que não foram explicitamente solicitados para modificação
 
 ### Exemplos
+
 - Sempre que possível, fornecer exemplos prontos para uso
 
 ## Padrão de Código
 
 ### Estrutura
+
 - **TypeScript** para arquivos `.ts` e `.tsx`
 - Componentes devem ser **function components** com **arrow functions**
 - Sempre tipar props e funções
@@ -110,6 +121,7 @@ Para componentes simples, pode ser apenas `ComponentName.tsx` e `ComponentName.t
 ### Convenções de Nomenclatura
 
 #### Arquivos
+
 - Componentes: **PascalCase** (ex: `Button.tsx`, `CharacterCard.tsx`)
 - Hooks customizados: **camelCase** com prefixo `use` (ex: `useBoard.ts`, `useDice.ts`)
 - Utilitários: **camelCase** (ex: `formatDate.ts`, `validateInput.ts`)
@@ -118,6 +130,7 @@ Para componentes simples, pode ser apenas `ComponentName.tsx` e `ComponentName.t
 - Styled components: `styled.ts` (arquivo), componentes dentro em **PascalCase**
 
 #### Código
+
 - Componentes: **PascalCase** (ex: `const Button = () => {}`)
 - Funções: **camelCase** (ex: `const handleClick = () => {}`)
 - Variáveis: **camelCase** (ex: `const userName = ""`)
@@ -131,11 +144,13 @@ Para componentes simples, pode ser apenas `ComponentName.tsx` e `ComponentName.t
 #### Interface vs Type
 
 **Usar `interface` quando:**
+
 - Definindo formas de objetos que podem ser estendidas
 - Props de componentes
 - Estruturas de dados que podem ser ampliadas
 
 **Usar `type` quando:**
+
 - Union types (ex: `type Status = "idle" | "loading" | "error"`)
 - Intersection types
 - Tipos utilitários (Pick, Omit, etc)
@@ -173,7 +188,11 @@ interface CharacterCardProps {
   isSelected?: boolean;
 }
 
-export const CharacterCard = ({ character, onMove, isSelected }: CharacterCardProps) => {
+export const CharacterCard = ({
+  character,
+  onMove,
+  isSelected
+}: CharacterCardProps) => {
   // ...
 };
 ```
@@ -218,19 +237,21 @@ export const Card = ({ title }: CardProps) => {
 Quando o componente tiver lógica complexa, separar em hook customizado:
 
 **useCharacterLogic.ts:**
+
 ```typescript
 export const useCharacterLogic = (characterId: string) => {
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
-  
+
   const moveCharacter = useCallback((newPosition: Position) => {
     setPosition(newPosition);
   }, []);
-  
+
   return { position, moveCharacter };
 };
 ```
 
 **CharacterCard.tsx:**
+
 ```typescript
 import { useCharacterLogic } from "./useCharacterLogic";
 
@@ -240,7 +261,7 @@ interface CharacterCardProps {
 
 export const CharacterCard = ({ characterId }: CharacterCardProps) => {
   const { position, moveCharacter } = useCharacterLogic(characterId);
-  
+
   return (
     <div>
       {/* UI do componente */}
@@ -287,12 +308,14 @@ import type { CharacterProps } from "./types";
 ```
 
 ### Estado e Lógica
+
 - Usar **React Hooks** para estado local
 - Usar **Context API + useReducer** para estado compartilhado entre componentes
 - Usar **Redux** apenas se o estado compartilhado se tornar muito complexo
 - Caso um arquivo fique muito grande em termos de lógica de estados e HTML, fazer a separação dos arquivos em um hook personalizado e um arquivo de view
 
 ### Organização
+
 - Separar lógica de negócio da apresentação
 - Criar hooks customizados quando a lógica for reutilizável
 - Manter componentes pequenos e focados
@@ -313,6 +336,7 @@ Usar Context API com useReducer para estado compartilhado entre múltiplos compo
 **Exemplo:**
 
 **types.ts:**
+
 ```typescript
 export interface BoardState {
   characters: Character[];
@@ -327,15 +351,19 @@ export type BoardAction =
 ```
 
 **reducer.ts:**
+
 ```typescript
 import type { BoardState, BoardAction } from "./types";
 
-export const boardReducer = (state: BoardState, action: BoardAction): BoardState => {
+export const boardReducer = (
+  state: BoardState,
+  action: BoardAction
+): BoardState => {
   switch (action.type) {
     case "ADD_CHARACTER":
       return {
         ...state,
-        characters: [...state.characters, action.payload],
+        characters: [...state.characters, action.payload]
       };
     case "MOVE_CHARACTER":
       return {
@@ -344,14 +372,15 @@ export const boardReducer = (state: BoardState, action: BoardAction): BoardState
           char.id === action.payload.id
             ? { ...char, position: action.payload.position }
             : char
-        ),
+        )
       };
     case "TOGGLE_FOG":
       const newFog = [...state.fogOfWar];
-      newFog[action.payload.y][action.payload.x] = !newFog[action.payload.y][action.payload.x];
+      newFog[action.payload.y][action.payload.x] =
+        !newFog[action.payload.y][action.payload.x];
       return {
         ...state,
-        fogOfWar: newFog,
+        fogOfWar: newFog
       };
     default:
       return state;
@@ -360,6 +389,7 @@ export const boardReducer = (state: BoardState, action: BoardAction): BoardState
 ```
 
 **BoardContext.tsx:**
+
 ```typescript
 import { createContext, useContext, useReducer, ReactNode } from "react";
 import { boardReducer } from "./reducer";
@@ -397,16 +427,20 @@ export const useBoard = (): BoardContextType => {
 ```
 
 **Uso:**
+
 ```typescript
 import { useBoard } from "@contexts/BoardContext";
 
 export const CharacterCard = ({ characterId }: CharacterCardProps) => {
   const { state, dispatch } = useBoard();
-  
+
   const handleMove = (position: Position) => {
-    dispatch({ type: "MOVE_CHARACTER", payload: { id: characterId, position } });
+    dispatch({
+      type: "MOVE_CHARACTER",
+      payload: { id: characterId, position }
+    });
   };
-  
+
   // ...
 };
 ```
@@ -439,7 +473,7 @@ describe("Button", () => {
   it("should call onClick when clicked", () => {
     const handleClick = jest.fn();
     render(<Button label="Click me" onClick={handleClick} />);
-    
+
     fireEvent.click(screen.getByText("Click me"));
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
@@ -455,11 +489,11 @@ import { useDice } from "./useDice";
 describe("useDice", () => {
   it("should roll dice and return result", () => {
     const { result } = renderHook(() => useDice());
-    
+
     act(() => {
       result.current.roll(20);
     });
-    
+
     expect(result.current.value).toBeGreaterThanOrEqual(1);
     expect(result.current.value).toBeLessThanOrEqual(20);
   });
@@ -476,15 +510,15 @@ describe("boardReducer", () => {
   const initialState: BoardState = {
     characters: [],
     gridSize: 10,
-    fogOfWar: [],
+    fogOfWar: []
   };
 
   it("should add character", () => {
     const newCharacter = { id: "1", name: "Hero", position: { x: 0, y: 0 } };
     const action = { type: "ADD_CHARACTER", payload: newCharacter };
-    
+
     const newState = boardReducer(initialState, action);
-    
+
     expect(newState.characters).toHaveLength(1);
     expect(newState.characters[0]).toEqual(newCharacter);
   });
@@ -500,21 +534,23 @@ import { test, expect } from "@playwright/test";
 
 test("should add character to board", async ({ page }) => {
   await page.goto("/");
-  
+
   await page.click('[data-testid="add-character-button"]');
   await page.fill('[data-testid="character-name-input"]', "Hero");
   await page.click('[data-testid="confirm-button"]');
-  
+
   await expect(page.locator('[data-testid="character-Hero"]')).toBeVisible();
 });
 
 test("should roll dice and display result", async ({ page }) => {
   await page.goto("/");
-  
+
   await page.click('[data-testid="dice-button-d20"]');
-  
+
   await expect(page.locator('[data-testid="dice-result"]')).toBeVisible();
-  const result = await page.locator('[data-testid="dice-result"]').textContent();
+  const result = await page
+    .locator('[data-testid="dice-result"]')
+    .textContent();
   expect(Number(result)).toBeGreaterThanOrEqual(1);
   expect(Number(result)).toBeLessThanOrEqual(20);
 });
@@ -575,7 +611,9 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 Sempre validar dados de entrada:
 
 ```typescript
-export const validateCharacter = (character: unknown): character is Character => {
+export const validateCharacter = (
+  character: unknown
+): character is Character => {
   return (
     typeof character === "object" &&
     character !== null &&
@@ -634,6 +672,7 @@ export const Component = () => {
 ### Exemplo Completo: Componente com Todas as Convenções
 
 **types.ts:**
+
 ```typescript
 export interface DiceProps {
   sides: number;
@@ -645,6 +684,7 @@ export type DiceType = 4 | 6 | 8 | 10 | 12 | 20 | 100;
 ```
 
 **styled.ts:**
+
 ```typescript
 import styled from "styled-components";
 
@@ -655,7 +695,7 @@ export const DiceButton = styled.button<{ disabled?: boolean }>`
   border: none;
   border-radius: 4px;
   cursor: ${({ disabled }) => (disabled ? "not-allowed" : "pointer")};
-  
+
   &:hover {
     background-color: ${({ disabled }) => (disabled ? "#ccc" : "#0056b3")};
   }
@@ -663,6 +703,7 @@ export const DiceButton = styled.button<{ disabled?: boolean }>`
 ```
 
 **Dice.test.tsx:**
+
 ```typescript
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Dice } from "./Dice";
@@ -676,7 +717,7 @@ describe("Dice", () => {
   it("should call onRoll when clicked", () => {
     const handleRoll = jest.fn();
     render(<Dice sides={20} onRoll={handleRoll} />);
-    
+
     fireEvent.click(screen.getByRole("button"));
     expect(handleRoll).toHaveBeenCalled();
   });
@@ -684,6 +725,7 @@ describe("Dice", () => {
 ```
 
 **Dice.tsx:**
+
 ```typescript
 import { useState, useCallback } from "react";
 import * as SC from "./styled";
@@ -707,6 +749,7 @@ export const Dice = ({ sides, onRoll, disabled }: DiceProps) => {
 ```
 
 **index.ts:**
+
 ```typescript
 export { Dice } from "./Dice";
 export type { DiceProps, DiceType } from "./types";
@@ -715,6 +758,7 @@ export type { DiceProps, DiceType } from "./types";
 ### Exemplo: Hook Customizado
 
 **useDice.ts:**
+
 ```typescript
 import { useState, useCallback } from "react";
 
@@ -741,6 +785,7 @@ export const useDice = (): UseDiceReturn => {
 ```
 
 **useDice.test.ts:**
+
 ```typescript
 import { renderHook, act } from "@testing-library/react";
 import { useDice } from "./useDice";
@@ -748,28 +793,28 @@ import { useDice } from "./useDice";
 describe("useDice", () => {
   it("should roll dice and return result", () => {
     const { result } = renderHook(() => useDice());
-    
+
     act(() => {
       result.current.roll(20);
     });
-    
+
     expect(result.current.result).toBeGreaterThanOrEqual(1);
     expect(result.current.result).toBeLessThanOrEqual(20);
   });
 
   it("should reset result", () => {
     const { result } = renderHook(() => useDice());
-    
+
     act(() => {
       result.current.roll(20);
     });
-    
+
     expect(result.current.result).not.toBeNull();
-    
+
     act(() => {
       result.current.reset();
     });
-    
+
     expect(result.current.result).toBeNull();
   });
 });

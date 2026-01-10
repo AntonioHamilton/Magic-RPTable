@@ -12,7 +12,8 @@
     "test:jest": "jest",
     "test:e2e": "playwright test",
     "format": "prettier --write \"src/**/*.{ts,tsx,json,css,md}\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
     "react": "^18.3.1",
