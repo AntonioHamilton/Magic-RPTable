@@ -44,6 +44,7 @@ Um projeto para jogar RPG de mesa com amigos onde é possível mostrar combates 
 - **Runtime:** Bun
 - **Linguagem:** TypeScript
 - **Estilização:** Tailwind CSS + styled-components
+- **Ícones:** HeroIcons ([Figma](https://www.figma.com/design/2dAwbJ7KZhq9itSnNVQvw4/Heroicons--Community-?node-id=1695-333&t=EiBJitCm7K5KwiwL-0) | [GitHub](https://github.com/tailwindlabs/heroicons))
 - **Testes:** Playwright + Jest
 - **Lint:** ESLint + Prettier
 - **Git Hooks:** Husky
@@ -53,7 +54,7 @@ Um projeto para jogar RPG de mesa com amigos onde é possível mostrar combates 
 ### Resumo Geral
 
 - [x] **Fase 0:** Setup e Estrutura Base (6/6 completas)
-- [ ] **Fase 1:** Board (0/5 completas)
+- [ ] **Fase 1:** Board (3/5 completas)
 - [ ] **Fase 2:** Rolagem de Dados (0/4 completas)
 - [ ] **Fase 3:** Personagens no Board (0/5 completas)
 - [ ] **Fase 4:** Esconder/Mostrar Posições no Board (0/4 completas)
@@ -121,22 +122,22 @@ Status: **Concluída** (6/6 completas)
 
 ### Fase 1: Board ⏳
 
-Status: **Pendente** (0/5 completas)
+Status: **Em Progresso** (3/5 completas)
 
-#### 1.1: Componente de Board Básico (Grid Visual) [ ]
+#### 1.1: Componente de Board Básico (Grid Visual) [x]
 
 - Criar componente Board com grid visual estático
 - Grid com células visíveis
 - **Teste:** Grid renderiza na tela com células visíveis
 
-#### 1.2: Sistema de Coordenadas e Grid Configurável [ ]
+#### 1.2: Sistema de Coordenadas e Grid Configurável [x]
 
 - Implementar sistema de coordenadas (x, y)
 - Grid configurável (tamanho de célula, quantidade de células)
 - Tipo de grid configurável (quadrado, hexágono - começar com quadrado)
 - **Teste:** Grid responde a mudanças de configuração
 
-#### 1.3: Controle de Tamanho do Grid [ ]
+#### 1.3: Controle de Tamanho do Grid [x]
 
 - O Mestre pode aumentar/diminuir quantidade de células em X e Y
 - Interface para editar dimensões do grid

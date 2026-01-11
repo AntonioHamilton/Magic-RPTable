@@ -8,6 +8,7 @@ Projeto para jogar RPG de mesa com amigos.
 - **Framework:** React 18 + TypeScript
 - **Build Tool:** Vite
 - **Estilização:** Tailwind CSS + styled-components
+- **Ícones:** HeroIcons ([Figma](https://www.figma.com/design/2dAwbJ7KZhq9itSnNVQvw4/Heroicons--Community-?node-id=1695-333&t=EiBJitCm7K5KwiwL-0) | [GitHub](https://github.com/tailwindlabs/heroicons))
 - **Testes:** Bun Test (unitários) + Playwright (E2E)
 - **Lint:** ESLint + Prettier
 
